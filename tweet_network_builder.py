@@ -2,7 +2,7 @@ import graph_builder as gb
 import matplotlib.pyplot as plt
 
 
-def analyze_csv_network_files(n_hubs=20, num_files = None, file_name=None):
+def analyze_csv_network_files(n_hubs=20, num_files = None, file_name=None, plot_title=None):
     """
     Controller function for the analysis process. User provides a few settings
     and this function will load the graph, setup all edges and nodes, define the
@@ -16,7 +16,7 @@ def analyze_csv_network_files(n_hubs=20, num_files = None, file_name=None):
     return: None
     """
     graph = gb.build_graph_from_csvs("data/", num_files=num_files)
-    position, network, ax = gb.draw_di_graph(graph)
+    position, network, ax = gb.draw_di_graph(graph, title=plot_title)
     hub_nodes = gb.get_hub_nodes(graph, top_n_hubs=n_hubs)
 
     for user, connections in hub_nodes:
@@ -30,4 +30,5 @@ def analyze_csv_network_files(n_hubs=20, num_files = None, file_name=None):
         plt.show()
 
 if __name__ == "__main__":
-    analyze_csv_network_files(file_name="images/example_network.png", num_files=None)
+    analyze_csv_network_files(file_name="images/example_network.png", num_files=None,
+                              plot_title="Conversation Drivers for topic 'Trump'")

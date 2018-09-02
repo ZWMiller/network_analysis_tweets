@@ -39,7 +39,7 @@ def build_graph_from_csvs(path, sep=";,.", num_files=None):
 
     return graph
 
-def draw_di_graph(graph_object, scale_by_degree=True):
+def draw_di_graph(graph_object, scale_by_degree=True, title=None):
     """
     Takes a networkx graph object and draws a plot of the network.
 
@@ -60,7 +60,13 @@ def draw_di_graph(graph_object, scale_by_degree=True):
     else:
         network = nx.draw(graph_object, pos=positions, node_size=10, alpha=0.5)
 
-    return positions, network, plt.gca()
+    ax = plt.gca()
+    if title:
+        props = dict(boxstyle='round', facecolor='white', alpha=0.5)
+        ax.text(0.25, 0.05, title, transform=ax.transAxes, fontsize=12,
+                verticalalignment='top', bbox=props)
+
+    return positions, network, ax
 
 def get_hub_nodes(graph_object, top_n_hubs=10):
     """
