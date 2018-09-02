@@ -15,6 +15,12 @@ about him? I used my network analyzer to find the voices that are often retweete
 
 ![Example Network](images/example_network.png)
 
+I do not particularly follow political journalist figures, so this analysis allowed me to
+identify many voices of political journalists as well as prominent figures in media that 
+large social network followings and frequently comment on Trump. That's the power of 
+this tool. From this analysis, I learned about Daniel Dale, Kyle Griffin, Joyce Alene,
+Brian Krassenstein, James Woods, and several others. 
+
 ## Pipeline pieces
 
 #### Twitter Streamer
