@@ -13,7 +13,7 @@ Since Trump is a lightning rod for discussion, who is really driving conversatio
 about him? I used my network analyzer to find the voices that are often retweeted 
 (based on 10 minutes of data on Sep. 01 2018). 
 
-![Example Network](images/example_network.png)
+![Example Network](images/example_network_hubs.png)
 
 I do not particularly follow political journalist figures, so this analysis allowed me to
 identify many voices of political journalists as well as prominent figures in media that 

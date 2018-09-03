@@ -1,15 +1,40 @@
 import networkx as nx
+import numpy as np
 from matplotlib import pyplot as plt
 import glob
 from cleaning_functions import clean_user_name
+from networkx.algorithms import community as co
 
-
-def build_graph_from_csvs(path, sep=";,.", num_files=None):
+def build_directed_graph_from_csvs(path, sep=";,.", num_files=None):
     """
-    Given a series of CSVs in the format user1 -> user2
-    separated by 'sep', creates a directed graph between
-    the users.
+    API call for users to get a directed graph from the CSV files.
 
+    path: the directory holding the csvs
+    sep: the separator between users on each line
+    num_files: how many files to use from dataset (none defaults to all)
+    return graph: networkx graph object
+    """
+    return _build_graph_from_csvs(nx.DiGraph, path, sep, num_files)
+
+
+def build_community_graph_from_csvs(path, sep=";,.", num_files=None):
+    """
+    API call for users to get an undirected graph from the CSV files.
+
+    path: the directory holding the csvs
+    sep: the separator between users on each line
+    num_files: how many files to use from dataset (none defaults to all)
+    return graph: networkx graph object
+    """
+    return _build_graph_from_csvs(nx.Graph, path, sep, num_files)
+
+def _build_graph_from_csvs(type_of_graph, path, sep, num_files):
+    """
+    Backend function to process a series of CSVs in the format user1 -> user2
+    separated by 'sep', and create a graph between the users.
+
+    type_of_graph: Allows this function to work with either directed or undirected
+    graphs, depending on provided method
     path: the directory holding the csvs
     sep: the separator between users on each line
     num_files: how many files to use from dataset (none defaults to all)
@@ -25,7 +50,7 @@ def build_graph_from_csvs(path, sep=";,.", num_files=None):
     if not num_files:
         num_files = len(file_list)
 
-    graph = nx.DiGraph()
+    graph = type_of_graph()
 
     for file in file_list[:num_files]:
         print("Opening ", file)
@@ -62,9 +87,7 @@ def draw_di_graph(graph_object, scale_by_degree=True, title=None):
 
     ax = plt.gca()
     if title:
-        props = dict(boxstyle='round', facecolor='white', alpha=0.5)
-        ax.text(0.25, 0.05, title, transform=ax.transAxes, fontsize=12,
-                verticalalignment='top', bbox=props)
+        add_title_box_to_plot(ax, title)
 
     return positions, network, ax
 
@@ -124,4 +147,77 @@ def highlight_important_nodes(graph_object, positions, hub_nodes=None, top_n_hub
     props = dict(boxstyle='round', facecolor='white', alpha=0.5)
     ax = plt.gca()
     ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=12,
+            verticalalignment='top', bbox=props)
+
+def get_communities(graph_object, iterations=5, print_communities=True):
+    """
+    Uses the community module (extension for networkx) to find communities
+    in the graph. Uses Girvan Newman method:
+    graph_object: Graph to detect communities in
+    iterations: How many times to attempt community subdivision using Girvan Newman
+    The more iterations, the more aggressive the algorithm is at breaking out communities
+    into smaller chunks.
+
+    return: Community map object, (dict)
+    """
+    communities_map = {}
+
+    community_generator = co.girvan_newman(graph_object)
+    for _ in range(iterations):
+        communities = next(community_generator)
+
+    for ix, community_list in enumerate(communities):
+        if print_communities:
+            print(community_list)
+        if len(community_list) > 5:
+            node_id = ix + 1
+        else:
+            node_id = 0
+        for node in community_list:
+            communities_map[node] = node_id
+
+    return communities_map
+
+def draw_community_map(graph_object, communities, title=None):
+    """
+    Given a graph object, the positions of the nodes, and the community label
+    for each node, colorize the communities
+
+    graph_object: Graph to draw
+    communities: Community Map (dict of form {node: community_id})
+
+    return: node positions, network object, axis
+    """
+
+    num_communities = max(communities.values())
+    colors = []
+
+    for node_name in graph_object.nodes():
+        if communities[node_name]:
+            colors.append(communities[node_name]+10)
+        else:
+            colors.append(0)
+
+    plt.figure(dpi=150)
+    positions = nx.spring_layout(graph_object)
+    network = nx.draw(graph_object, node_size=5, pos=positions,
+                      node_color=plt.cm.jet(colors), alpha=0.9)
+
+    ax = plt.gca()
+    if title:
+        add_title_box_to_plot(ax, title)
+
+    return positions, network, ax
+
+def add_title_box_to_plot(ax, title):
+    """
+    Adds a string to the bottom of the plots inside a bounding box.
+
+    ax: the axis containing the graph plot
+    title: string to add inside the bounding box on the plot
+
+    return: None
+    """
+    props = dict(boxstyle='round', facecolor='white', alpha=0.5)
+    ax.text(0.25, 0.05, title, transform=ax.transAxes, fontsize=12,
             verticalalignment='top', bbox=props)
