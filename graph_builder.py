@@ -167,9 +167,9 @@ def get_communities(graph_object, iterations=5, print_communities=True):
         communities = next(community_generator)
 
     for ix, community_list in enumerate(communities):
-        if print_communities:
-            print(community_list)
         if len(community_list) > 5:
+            if print_communities:
+                print(community_list)
             node_id = ix + 1
         else:
             node_id = 0
@@ -189,7 +189,6 @@ def draw_community_map(graph_object, communities, title=None):
     return: node positions, network object, axis
     """
 
-    num_communities = max(communities.values())
     colors = []
 
     for node_name in graph_object.nodes():

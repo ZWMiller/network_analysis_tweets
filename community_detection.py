@@ -26,6 +26,6 @@ def find_communities_in_csv_network_files(num_files = None, file_name=None, plot
         plt.show()
 
 if __name__ == "__main__":
-    find_communities_in_csv_network_files(file_name="images/community_detection_example.png", num_files=None,
+    find_communities_in_csv_network_files(file_name="images/community_detection_example.png", num_files=3,
                                           plot_title="Communities in Twitter 'Trump' Discussions",
-                                          iterations=30)
+                                          iterations=30, print_communities=True)
