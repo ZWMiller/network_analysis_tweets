@@ -42,7 +42,7 @@ one set of users that were found are here:
 'HiddenTrumper', 'Gilbert', 'pilar'}
 ```
 
-This user group is definitively pro-Trump (including Trump himself), but have also retweeted several
+This user group is largely pro-Trump (including Trump himself) - or folks who have retweeted several
 other pro-Trump outlets and users. These aren't "remarkable users" otherwise that I would have
 pre-labeled. So this algorithm was able to pull out groupings of users, even from just 10 minutes
 of data collected on one September evening. 
