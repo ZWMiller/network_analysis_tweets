@@ -105,3 +105,13 @@ Analyzing Network:
 * networkx
 * matplotlib
 * glob
+
+# Optional Tools
+
+If you want to make a nicer visualization of your graph, you may be interested in graphistry
+https://github.com/graphistry/pygraphistry. I used it with the directed graph made in the hub
+finding network and produced the following plot which is nicer to look at, and can be filtered,
+zoomed, and swooshed around. See [make_graphistry_plot.py](make_graphistry_plot.py) (you'll need
+your own version of their API key, as I've hidden mine so you can't steal it).
+
+![graphistry plot](images/pygraphistry_example.png)
